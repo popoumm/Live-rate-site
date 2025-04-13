@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>نمایش کامل نرخ‌ها</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- فونت زیبا -->
+  <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Tahoma, sans-serif;
+      background: url("https://i.pinimg.com/originals/20/9a/25/209a250ab14f844f4b8273fda5b08ee7.jpg") no-repeat center center fixed;
+      background-size: cover;
+      direction: rtl;
+      color: #333;
+    }
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.75);
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .header {
+      text-align: center;
+      font-size: 48px;
+      font-family: 'Lalezar', cursive;
+      color: #222;
+      margin: 20px 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .item {
+      font-size: 14px;
+      margin: 6px 0;
+      padding: 4px 0;
+      border-bottom: 1px dotted #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">Pouya</div>
+    <div class="container">
+      <div id="allData">در حال بارگذاری...</div>
+    </div>
+  </div>
+
+  <script>
+    const apiUrl = "https://brsapi.ir/Api/Market/Gold_Currency.php?key=FreeaWKXMvkIa3k7ZNUobmPrX1hJfcUG";
+
+    function renderSection(title, items) {
+      const container = document.getElementById("allData");
+
+      const sectionTitle = document.createElement("div");
+      sectionTitle.className = "section-title";
+      sectionTitle.innerText = title;
+      container.appendChild(sectionTitle);
+
+      items.forEach(item => {
+        const line = document.createElement("div");
+        line.className = "item";
+        line.innerText = `${item.name} | ${item.unit} | قیمت: ${item.price} | ریبیت: ${item.change_value} | درصد: ${item.change_percent}%`;
+        container.appendChild(line);
+      });
+    }
+
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("allData");
+        container.innerHTML = ""; // پاک کردن پیام اولیه
+
+        if (data.gold) renderSection("بازار طلا", data.gold);
+        if (data.currency) renderSection("بازار ارز", data.currency);
+        if (data.coin) renderSection("بازار سکه", data.coin);
+        if (data.stock) renderSection("بورس و شاخص‌ها", data.stock);
+        if (data.crypto) renderSection("رمزارزها", data.crypto);
+      })
+      .catch(err => {
+        console.error("خطا در دریافت داده‌ها:", err);
+        document.getElementById("allData").innerText = "خطا در دریافت اطلاعات.";
+      });
+  </script>
+</body>
+</html>
