@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>نرخ لحظه‌ای بازار</title>
+  <style>
+    body { font-family: Tahoma; direction: rtl; padding: 20px; background: #f0f0f0; }
+    .rate-box { background: white; padding: 15px; border-radius: 8px; max-width: 400px; margin: auto; box-shadow: 0 0 10px #ccc; }
+    .item { margin: 10px 0; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div class="rate-box">
+    <h2>نرخ‌های لحظه‌ای</h2>
+    <div class="item" id="gold">انس طلا: در حال بارگذاری...</div>
+    <div class="item" id="usd">دلار آزاد: در حال بارگذاری...</div>
+  </div>
+
+  <script>
+    async function fetchRates() {
+      try {
+        const response = await fetch("https://brsapi.ir/Api/Market/Gold_Currency.php?key=FreeaWKXMvkIa3k7ZNUobmPrX1hJfcUG");
+        const data = await response.json();
+
+        document.getElementById('gold').innerText = `انس طلا: ${data.gold.ons} دلار`;
+        document.getElementById('usd').innerText = `دلار آزاد: ${data.currency.usd.price} تومان`;
+
+      } catch (error) {
+        document.getElementById('gold').innerText = 'خطا در دریافت نرخ‌ها';
+        document.getElementById('usd').innerText = '';
+      }
+    }
+
+    fetchRates();
+    setInterval(fetchRates, 30000); // آپدیت هر ۳۰ ثانیه
+  </script>
+</body>
+</html>
