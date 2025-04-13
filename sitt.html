@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>نرخ لحظه‌ای طلا و ارز</title>
+  <style>
+    body {
+      font-family: Vazir, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    .rate-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .item {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>نرخ لحظه‌ای طلا و ارز</h1>
+  <div class="rate-box">
+    <div class="item" id="usd">دلار: در حال بارگذاری...</div>
+    <div class="item" id="gold">طلای 18 عیار: در حال بارگذاری...</div>
+  </div>
+
+  <script>
+    fetch("https://brsapi.ir/Api/Market/Gold_Currency.php?key=FreeaWKXMvkIa3k7ZNUobmPrX1hJfcUG")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("usd").innerText = "دلار: " + data["دلار آزاد"] + " تومان";
+        document.getElementById("gold").innerText = "طلای 18 عیار: " + data["طلای 18 عیار"] + " تومان";
+      })
+      .catch(err => {
+        document.getElementById("usd").innerText = "خطا در دریافت نرخ دلار";
+        document.getElementById("gold").innerText = "خطا در دریافت نرخ طلا";
+      });
+  </script>
+</body>
+</html>
